@@ -5,7 +5,6 @@ import { UserRepositoryPrisma } from "../../../repositories/user/prisma/user.rep
 import prisma from "../../../repositories/prisma";
 import { UserServiceImplementation } from "../../../services/user/implementation/user.service.implementation";
 import { userUpdateSchema } from "../../../models/schemas/user.schemas";
-import { string } from "zod";
 
 export class UserController {
     private constructor() {};

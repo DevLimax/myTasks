@@ -8,7 +8,7 @@ export default class Hash {
         return hashPassword
     }
 
-    static async matchPassword(password: string, hash: string) {
+    static async matchPassword(password: string, hash: string): Promise<boolean> {
         return await bcrypt.compare(password, hash);
     }
 }
