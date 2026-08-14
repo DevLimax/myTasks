@@ -26,7 +26,7 @@ export class UserRepositoryPrisma implements UserRepository {
         } catch (e: any) {
             if(e.message.includes('username')) {
                 throw new Error('username in use');
-            } else if (e.message.inclues('email')) {
+            } else if (e.message.includes('email')) {
                 throw new Error('email in use');
             } else {
                 throw new Error(e.messsage);
