@@ -5,7 +5,8 @@ export async function validateFieldUserCreate(req: Request, res: Response, next:
     const result = userCreateSchema.safeParse(req.body);
     if(!result.success) {
         const message = result.error.issues[0]?.message
-        return res.status(400).json({message: message}).send();
+        res.status(400).json({message: message}).send();
+        return
     }
     next();
 }
