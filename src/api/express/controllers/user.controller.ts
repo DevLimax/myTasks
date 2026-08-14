@@ -63,6 +63,14 @@ export class UserController {
         res.status(200).json(data).send();
     }
 
+    public async edit(req: Request, res: Response) {
+        const {id} = req.params;
+        if(typeof id != 'string') return res.status(400).send('Invalid ID');
+
+        const aRepository = UserRepositoryPrisma.build(prisma);
+        const aService = UserServiceImplementation.build(aRepository);
+    }
+
     public async delete(req: Request, res: Response) {
         const {id} = req.params;
         if(typeof id != 'string') {
