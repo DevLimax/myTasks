@@ -10,7 +10,7 @@ export class UserController {
     private constructor() {};
 
     public static build() {
-        new UserController();
+        return new UserController();
     };
 
     public async save(req: Request, res: Response) {
@@ -53,6 +53,7 @@ export class UserController {
         const output = typeof id === 'string' ? await aService.find(id) : null;
         if(!output) {
             res.status(404).send(`user not found`);
+            return
         }
 
         const data = {
@@ -74,15 +75,16 @@ export class UserController {
         const validator = userUpdateSchema.safeParse(req.body);
         if(!validator.success) {
             const message = validator.error.issues[0]?.message
-            return res.status(400).json({message: message}).send();
+            res.status(400).json({message: message}).send();
+            return
         }
 
         const {username, email} = validator.data;
         try {
             const user = await aService.update(id, {newUsername: username, newEmail: email});
-            return res.status(200).json(user).send();
+            res.status(200).json(user).send();
         } catch (e: any) {
-            return res.status(500).json({message: e.message});
+            res.status(500).json({message: e.message});
         };
     }
 
@@ -100,6 +102,7 @@ export class UserController {
 
         if(!aUser) {
             res.status(404).send("user not found");
+            return
         }
 
         try{
