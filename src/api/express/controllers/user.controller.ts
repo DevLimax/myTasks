@@ -4,6 +4,7 @@ import { UserRepositoryPrisma } from "../../../repositories/user/prisma/user.rep
 
 import prisma from "../../../repositories/prisma";
 import { UserServiceImplementation } from "../../../services/user/implementation/user.service.implementation";
+import { userUpdateSchema } from "../../../models/schemas/user.schemas";
 
 export class UserController {
     private constructor() {};
@@ -69,6 +70,20 @@ export class UserController {
 
         const aRepository = UserRepositoryPrisma.build(prisma);
         const aService = UserServiceImplementation.build(aRepository);
+
+        const validator = userUpdateSchema.safeParse(req.body);
+        if(!validator.success) {
+            const message = validator.error.issues[0]?.message
+            return res.status(400).json({message: message}).send();
+        }
+
+        const {username, email} = validator.data;
+        try {
+            const user = await aService.update(id, {newUsername: username, newEmail: email});
+            return res.status(200).json(user).send();
+        } catch (e: any) {
+            return res.status(500).json({message: e.message});
+        };
     }
 
     public async delete(req: Request, res: Response) {
