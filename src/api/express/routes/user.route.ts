@@ -11,6 +11,6 @@ router.get('/', controller.list);
 router.get('/:id', controller.find);
 router.put('/:id', controller.edit);
 router.put('/updatePassword/:id', controller.updatePassword);
-router.delete(':id', controller.delete);
+router.delete('/:id', controller.delete);
 
 export {router as userRouter}
