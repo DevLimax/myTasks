@@ -3,7 +3,7 @@
     "module": "esnext",
     "target": "es2023",
     "moduleResolution": "bundler",
-    "types": ["node", "express", "bcrypt", "jest"],
+    "types": ["node", "express", "bcrypt", "jest", "cors"],
 
     "sourceMap": true,
     "declaration": true,
