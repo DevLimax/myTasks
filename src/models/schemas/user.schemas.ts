@@ -11,7 +11,7 @@ export const userCreateSchema = z.object({
                 .max(18, {error: 'senha deve ter menos de 18 caracteres'})
 })
 
-export const useUpdateSchema = z.object({
+export const userUpdateSchema = z.object({
     username: z.string({error: 'o campo username deve ser um string'})
                 .min(3, {error: 'username deve ter pelo menos 3 caracteres'})
                 .max(16, {error: 'username deve ter menos de 16 caracteres'})
