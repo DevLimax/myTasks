@@ -1,7 +1,7 @@
 import User from "../../../models/entities/user";
 import type { UserRepository } from "../../../repositories/user/user.repository";
 import Hash from "../../../utils/hash.utils";
-import type { ListOutputDto, UserOutputDto, UserService } from "../user.service";
+import type { ListOutputDto, LoginOutputDto, UserOutputDto, UserService } from "../user.service";
 
 
 export class UserServiceImplementation implements UserService {
@@ -99,5 +99,15 @@ export class UserServiceImplementation implements UserService {
         } catch(e: any) {
             throw new Error(e.message);
         }
+    }
+
+    public async login(email: string, unhashedPassword: string): Promise<LoginOutputDto> {
+        const data = await this.repository.find(undefined, email);
+        if(!data) {
+            throw new Error('user not found with the email provided');
+        }
+        const {id, username, password, lastLogin} = data;
+        const user = User.with(id, username, email, password, lastLogin);
+        return user.login(unhashedPassword)
     }
 }
