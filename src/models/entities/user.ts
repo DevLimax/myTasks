@@ -1,4 +1,6 @@
+import type { LoginOutputDto } from "../../services/user/user.service";
 import Hash from "../../utils/hash.utils";
+import { generateRefreshToken, generateToken } from "../../utils/token.utils";
 import type { TaskProps } from "./task";
 
 export type UserProps = {
@@ -35,6 +37,23 @@ export default class User {
             lastLogin,
             tasks
         })
+    }
+
+    public async login(password: string): Promise<LoginOutputDto> {
+        const checkPassword = await Hash.matchPassword(password, this.props.password);
+        if(!checkPassword) {
+            throw new Error('Senha invalida!');
+        }
+        const payload = {
+            id: this.id,
+            username: this.username,
+            email: this.username
+        };
+        const output = {
+            accessToken: generateToken(payload),
+            refreshToken: generateRefreshToken(payload)
+        };
+        return output
     }
 
     public get id(): string {return this.props.id};
