@@ -139,4 +139,18 @@ export class UserController {
             res.status(400).json({message: e.message});
         }
     }
+
+    public async login(req: Request, res: Response) {
+        const {email, password} = req.body;
+
+        const aRepository = UserRepositoryPrisma.build(prisma);
+        const aService = UserServiceImplementation.build(aRepository);
+
+        try{
+            const output = await aService.login(email, password);
+            res.status(201).json(output);
+        } catch(e: any) {
+            res.status(400).json({message: e.message});
+        };
+    }
 }
