@@ -23,3 +23,8 @@ export const userUpdateSchema = z.object({
                 .max(18, {error: 'senha deve ter menos de 18 caracteres'})
                 .optional()
 })
+
+export const userLoginSchema = z.object({
+    email: z.email({error: 'invalid email'}).nonoptional({error: 'email not provided'}),
+    password: z.string({error: 'invalid password'}).nonoptional({error: 'password not provided'})
+})
