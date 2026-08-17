@@ -1,26 +1,14 @@
-export enum Priority {
-    Low = 'low',
-    Medium = 'medium',
-    High = 'high',
-    VeryHigh = 'very high'
-}
-
-export enum Status {
-    IN_PROGRESS = 'in progress',
-    PENDING = 'pending',
-    DELAYED = 'delayed',
-    COMPLETED = 'completed'
-}
+import { Priority, Status } from "@prisma/client";
 
 export type TaskProps = {
     id: string,
     userId: string,
     title: string,
-    description?: string,
+    description?: string | null,
     priority: Priority
     status: Status,
     created_at?: Date,
-    completed_on?: Date
+    completed_on?: Date | null
 }
 
 export default class Task {
@@ -30,8 +18,8 @@ export default class Task {
         userId: string, 
         title: string, 
         description?: string, 
-        priority: Priority = Priority.Medium, 
-        status: Status = Status.PENDING
+        priority: Priority = Priority.medium, 
+        status: Status = Status.pending
     ) {
         const id = crypto.randomUUID().toString();
         return new Task({
@@ -44,14 +32,14 @@ export default class Task {
         })
     }
 
-    private static with(id: string,
+    public static with(id: string,
                         userId: string,
                         title: string, 
-                        description: string, 
+                        description: string | null,
                         priority: Priority, 
                         status: Status, 
                         created_at?: Date, 
-                        completed_on?: Date
+                        completed_on?: Date | null
     ) {
         return new Task({
             id,
@@ -65,11 +53,21 @@ export default class Task {
         })
     }
 
+    public completeTask() {
+        if(this.status != Status.completed) {
+            throw new Error(`It is not possible to complete the task with the status: ${this.status}`);
+        } else if (this.status === Status.completed) {
+            this.props.completed_on = new Date();
+            return
+        }
+    }
+
     public get id(): string {return this.props.id};
+    public get userId(): string {return this.props.userId}
     public get title(): string {return this.props.title};
-    public get description(): string | undefined {return this.props.description};
+    public get description(): string | undefined | null {return this.props.description};
     public get priority(): Priority {return this.props.priority};
     public get status(): Status {return this.props.status};
     public get created_at(): Date | undefined {return this.props.created_at};
-    public get completed_on(): Date | undefined {return this.props.completed_on};
+    public get completed_on(): Date | undefined | null {return this.props.completed_on};
 }
