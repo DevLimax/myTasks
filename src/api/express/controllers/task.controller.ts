@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import type { TaskInputDto, TaskService, TaskUpdateInputDto } from "../../../services/task/task.service";
+import type { TaskFilters } from "../../../repositories/task/task.repository";
 
 
 export class TaskController {
@@ -27,8 +28,14 @@ export class TaskController {
     }
 
     public list = async (req: Request, res: Response) => {
-        // const {userId, status, priority} = req.params; -> futuros campos de filter
-        const tasks = await this.service.list();
+        const {userId, status, priority} = req.query;
+        const filters: TaskFilters = {
+            userId,
+            status,
+            priority
+        };
+        console.log(filters)
+        const tasks = await this.service.list(filters);
         res.status(200).json(tasks);
     }
 
