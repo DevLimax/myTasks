@@ -1,4 +1,5 @@
 import type { Priority, Status } from "@prisma/client"
+import type { TaskFilters } from "../../repositories/task/task.repository"
 
 export type TaskInputDto = {
     userId: string
@@ -31,7 +32,7 @@ export type TaskUpdateInputDto = {
 
 export interface TaskService {
     save(task: TaskInputDto): Promise<TaskOutputDto>;
-    list(): Promise<ListTaskOutputDto>;
+    list(filters: TaskFilters): Promise<ListTaskOutputDto>;
     find(id: string): Promise<TaskOutputDto | null>;
     update(id: string, data: TaskUpdateInputDto): Promise<TaskOutputDto>;
     delete(id: string): Promise<void>;

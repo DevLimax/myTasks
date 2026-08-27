@@ -1,6 +1,6 @@
 import { Status } from "@prisma/client";
 import Task from "../../../models/entities/task";
-import type { TaskRepository } from "../../../repositories/task/task.repository";
+import type { TaskFilters, TaskRepository } from "../../../repositories/task/task.repository";
 import type { ListTaskOutputDto, TaskInputDto, TaskOutputDto, TaskService, TaskUpdateInputDto } from "../task.service";
 
 
@@ -31,8 +31,8 @@ export class TaskServiceImplementation implements TaskService {
         }
     }
 
-    public async list(): Promise<ListTaskOutputDto> {
-        const tasks = await this.repository.list();
+    public async list(filters: TaskFilters): Promise<ListTaskOutputDto> {
+        const tasks = await this.repository.list(filters);
         const output: ListTaskOutputDto = {
             tasks: tasks.map(task => {
                 return {
