@@ -1,6 +1,6 @@
-import { type PrismaClient } from "@prisma/client";
+import { Prisma, type PrismaClient } from "@prisma/client";
 import Task from "../../../models/entities/task";
-import type { TaskRepository } from "../task.repository";
+import type { TaskFilters, TaskRepository } from "../task.repository";
 
 export class TaskRepositoryPrisma implements TaskRepository {
 
@@ -30,13 +30,20 @@ export class TaskRepositoryPrisma implements TaskRepository {
         }
     }
 
-    public async list(): Promise<Task[]> {
-        const query = await this.repository.task.findMany();
-        const tasks = query.map(task => {
+    public async list(filters: TaskFilters): Promise<Task[]> {
+
+        const where: Prisma.TaskWhereInput = {};
+
+        if (filters.userId !== undefined) where.userId = filters.userId;
+        if (filters.status !== undefined) where.status = filters.status;
+        if (filters.priority !== undefined) where.priority = filters.priority;
+
+        const tasks = await this.repository.task.findMany({where});
+
+        return tasks.map(task => {
             const {id, userId, title, description, status, priority, created_at, completed_on} = task;
             return Task.with(id, userId, title, description, priority, status, created_at, completed_on);
         });
-        return tasks
     }
 
     public async find(id: string): Promise<Task | null> {
