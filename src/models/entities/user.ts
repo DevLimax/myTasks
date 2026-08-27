@@ -47,7 +47,7 @@ export default class User {
         const payload = {
             id: this.id,
             username: this.username,
-            email: this.username
+            email: this.email
         };
         const output = {
             accessToken: generateToken(payload),
