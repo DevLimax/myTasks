@@ -5,6 +5,8 @@ import { UserRepositoryPrisma } from "../../../repositories/user/prisma/user.rep
 import prisma from "../../../repositories/prisma";
 import { UserServiceImplementation } from "../../../services/user/implementation/user.service.implementation";
 import { userUpdateSchema } from "../../../models/schemas/user.schemas";
+import { exportPayload } from "../../../utils/token.utils";
+import type { JwtPayload } from "jsonwebtoken";
 
 export class UserController {
     private constructor() {};
@@ -66,7 +68,7 @@ export class UserController {
     }
 
     public async updatePassword(req: Request, res: Response) {
-        const {id} = req.params;
+        const {id}: any = exportPayload(req.headers['authorization']?.split(' ')[1] || '');
         if(typeof id != 'string') return res.status(400).send('Invalid ID');
 
         const aRepository = UserRepositoryPrisma.build(prisma);
@@ -93,7 +95,7 @@ export class UserController {
     }
 
     public async edit(req: Request, res: Response) {
-        const {id} = req.params;
+        const {id}: any = exportPayload(req.headers['authorization']?.split(' ')[1] || '');
         if(typeof id != 'string') return res.status(400).send('Invalid ID');
 
         const aRepository = UserRepositoryPrisma.build(prisma);
