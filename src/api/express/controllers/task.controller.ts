@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import type { TaskInputDto, TaskService, TaskUpdateInputDto } from "../../../services/task/task.service";
 import type { TaskFilters } from "../../../repositories/task/task.repository";
+import type { Priority, Status } from "@prisma/client";
 
 
 export class TaskController {
@@ -30,9 +31,9 @@ export class TaskController {
     public list = async (req: Request, res: Response) => {
         const {userId, status, priority} = req.query;
         const filters: TaskFilters = {
-            userId,
-            status,
-            priority
+            userId: userId as string | undefined,
+            status: status as Status | undefined,
+            priority: priority as Priority | undefined
         };
         console.log(filters)
         const tasks = await this.service.list(filters);
@@ -41,6 +42,7 @@ export class TaskController {
 
     public find = async (req: Request, res: Response) => {
         const {id} = req.params;
+        if(typeof id !== 'string') {return res.status(400).json({message: 'id is required'});}
         const task = await this.service.find(id);
         if(!task) {
             res.status(404).send('task not found');
@@ -51,6 +53,7 @@ export class TaskController {
 
     public update = async (req: Request, res: Response) => {
         const {id} = req.params;
+        if(typeof id !== 'string') {return res.status(400).json({message: 'id is required'});}
         const {title, description, status, priority} = req.body;
         const data: TaskUpdateInputDto = {
             title,
@@ -68,6 +71,7 @@ export class TaskController {
 
     public delete = async (req: Request, res: Response) => {
         const {id} = req.params;
+        if(typeof id !== 'string') {return res.status(400).json({message: 'id is required'});}
         try{
             await this.service.delete(id);
             res.status(204).send();
