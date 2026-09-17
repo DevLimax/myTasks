@@ -39,11 +39,7 @@ export default class User {
         })
     }
 
-    public async login(password: string): Promise<LoginOutputDto> {
-        const checkPassword = await Hash.matchPassword(password, this.props.password);
-        if(!checkPassword) {
-            throw new Error('credentials invalid!');
-        }
+    public async login(): Promise<LoginOutputDto> {
         const payload = {
             id: this.id,
             username: this.username,
