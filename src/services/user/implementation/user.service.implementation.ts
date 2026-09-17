@@ -106,8 +106,15 @@ export class UserServiceImplementation implements UserService {
         if(!data) {
             throw new Error('user not found with the email provided');
         }
-        const {id, username, password, lastLogin} = data;
+        const {id, username, password} = data;
+        const lastLogin = new Date();
         const user = User.with(id, username, email, password, lastLogin);
-        return user.login(unhashedPassword)
+        
+        const checkPassword = await Hash.matchPassword(unhashedPassword, password);
+        if(!checkPassword) {
+            throw new Error('credentials invalid!');
+        }
+        this.repository.update(id, {newLastLogin: lastLogin});
+        return user.login();
     }
 }
