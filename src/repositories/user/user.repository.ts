@@ -3,7 +3,8 @@ import type User from "../../models/entities/user";
 export type UserUpdateInput = {
     newUsername?: string,
     newEmail?: string,
-    newPassword?: string
+    newPassword?: string,
+    newLastLogin?: Date
 }
 
 export interface UserRepository {

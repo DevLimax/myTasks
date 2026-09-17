@@ -50,6 +50,7 @@ export class UserRepositoryPrisma implements UserRepository {
         aUser.username = data.newUsername ?? aUser.username;
         aUser.email = data.newEmail ?? aUser.email;
         aUser.password = data.newPassword ?? aUser.password;
+        aUser.last_login = data.newLastLogin ?? aUser.last_login;
 
         const {username, email, password, last_login} = await this.repository.user.update({where: {id: id}, data: {...aUser}});
         const user = User.with(id, username, email, password, last_login);
