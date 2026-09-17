@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import type { TaskInputDto, TaskService, TaskUpdateInputDto } from "../../../services/task/task.service";
 import type { TaskFilters } from "../../../repositories/task/task.repository";
 import type { Priority, Status } from "@prisma/client";
+import { exportPayload } from "../../../utils/token.utils";
 
 
 export class TaskController {
@@ -12,7 +13,10 @@ export class TaskController {
     }
 
     public save = async (req: Request, res: Response) => {
-        const {userId, title, description, status, priority} = req.body;
+        const currentToken = req.headers['authorization']?.split(' ')[1] || ''
+        const payload: any = exportPayload(currentToken);
+        const userId = payload?.id; 
+        const {title, description, status, priority} = req.body;
         const data: TaskInputDto = {
             userId,
             title,
