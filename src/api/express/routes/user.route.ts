@@ -1,11 +1,18 @@
-import { Router } from "express";
+import prisma from "../../../repositories/prisma";
 
-import { UserController } from "../controllers/user.controller";
+import { Router } from "express";
 import { checkTokenValid, validateFieldUserCreate } from "../middlewares/user.middleware";
 
-const router = Router();
-const controller = UserController.build();
+import { UserController } from "../controllers/user.controller";
+import { UserRepositoryPrisma } from "../../../repositories/user/prisma/user.repository.prisma";
+import { UserServiceImplementation } from "../../../services/user/implementation/user.service.implementation";
 
+
+const aRepository = UserRepositoryPrisma.build(prisma);
+const aService = UserServiceImplementation.build(aRepository);
+const controller = UserController.build(aService);
+
+const router = Router();
 router.post('/create', validateFieldUserCreate,  controller.save);
 router.post('/login', controller.login);
 router.get('/', controller.list);
