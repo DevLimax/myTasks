@@ -12,5 +12,6 @@ export interface UserRepository {
     list(): Promise<User[]>
     update(id: string, data: UserUpdateInput): Promise<User>
     find(id?: string, email?: string): Promise<User | null>
+    findWithTasks(id: string): Promise<User | null>
     delete(id: string): Promise<void>
 }

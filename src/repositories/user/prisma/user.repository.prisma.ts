@@ -77,6 +77,15 @@ export class UserRepositoryPrisma implements UserRepository {
         }
     }
 
+    public async findWithTasks(id: string): Promise<User | null> {
+        const query = await this.repository.user.findUnique({where: {id: id}, include: {tasks: true}});
+        if(!query) {return null};
+
+        const {username, email, password, last_login, tasks} = query;
+        const user = User.with(id, username, email, password, last_login, tasks);
+        return user
+    }
+
     public async delete(id: string): Promise<void> {
         const query = await this.repository.user.findUnique({where: {id: id}});
         if(!query) {throw new Error('user not found')};
