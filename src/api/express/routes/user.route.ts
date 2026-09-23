@@ -1,7 +1,8 @@
 import prisma from "../../../repositories/prisma";
 
 import { Router } from "express";
-import { checkTokenValid, validateFieldUserCreate } from "../middlewares/user.middleware";
+import { validateFieldUserCreate } from "../middlewares/user.middleware";
+import { checkTokenValid } from "../middlewares/token.middleware";
 
 import { UserController } from "../controllers/user.controller";
 import { UserRepositoryPrisma } from "../../../repositories/user/prisma/user.repository.prisma";

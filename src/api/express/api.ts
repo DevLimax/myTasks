@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { userRouter } from "./routes/user.route";
 import { taskRouter } from "./routes/task.route";
-import { checkTokenValid } from "./middlewares/user.middleware";
+import { checkTokenValid } from "./middlewares/token.middleware";
 
 const router = Router();
 
