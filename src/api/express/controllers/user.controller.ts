@@ -37,17 +37,28 @@ export class UserController {
 
     public find = async (req: Request, res: Response) => {
         const {id} = req.params;
-        const output = typeof id === 'string' ? await this.service.find(id) : null;
+        const {withTasks} = req.query;
+        const output = typeof id === 'string' ? await this.service.find(id, withTasks === 'true') : null;
         if(!output) {
             res.status(404).send(`user not found`);
             return
         }
-
         const data = {
             id: id,
             username: output?.username,
             email: output?.email,
-            lastLogin: output?.lastLogin
+            lastLogin: output?.lastLogin,
+            tasks: output?.tasks?.map(task => {
+                return {
+                    id: task.id,
+                    title: task.title,
+                    description: task.description,
+                    status: task.status,
+                    priority: task.priority,
+                    created_at: task.created_at,
+                    completed_on: task.completed_on
+                }
+            })
         }
         res.status(200).json(data).send();
     }
