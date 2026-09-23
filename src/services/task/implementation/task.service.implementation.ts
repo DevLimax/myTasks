@@ -18,6 +18,7 @@ export class TaskServiceImplementation implements TaskService {
             const instance = await this.repository.save(entity);
             const output: TaskOutputDto = {
                 id: instance.id,
+                userId: instance.userId,
                 title: instance.title,
                 description: instance.description,
                 priority: instance.priority,
@@ -37,6 +38,7 @@ export class TaskServiceImplementation implements TaskService {
             tasks: tasks.map(task => {
                 return {
                     id: task.id,
+                    userId: task.userId,
                     title: task.title,
                     description: task.description,
                     priority: task.priority,
@@ -54,6 +56,7 @@ export class TaskServiceImplementation implements TaskService {
         if(!query) {return null};
         const output: TaskOutputDto =  {
             id: query.id,
+            userId: query.userId,
             title: query.title,
             description: query.description,
             status: query.status,
@@ -73,7 +76,7 @@ export class TaskServiceImplementation implements TaskService {
             id, 
             task.userId,
             data.title ?? task.title,
-            data.description ?? task.description,
+            data.description ?? task.description ?? null,
             data.priority ?? task.priority,
             data.status ?? task.status
         )
@@ -84,6 +87,7 @@ export class TaskServiceImplementation implements TaskService {
             await this.repository.update(id, taskUpdated);
             return {
                 id: taskUpdated.id,
+                userId: taskUpdated.userId,
                 title: taskUpdated.title,
                 description: taskUpdated.description,
                 priority: taskUpdated.priority,

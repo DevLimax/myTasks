@@ -11,6 +11,7 @@ export type TaskInputDto = {
 
 export type TaskOutputDto = {
     id: string,
+    userId: string,
     title: string,
     description?: string | null,
     status: Status,
