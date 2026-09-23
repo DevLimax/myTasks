@@ -45,16 +45,17 @@ export class UserServiceImplementation implements UserService {
         return output
     }
 
-    public async find(id: string): Promise<UserOutputDto | null> {
-        const query = await this.repository.find(id);
+    public async find(id: string, withTasks?: boolean): Promise<UserOutputDto | null> {
+        const query = withTasks ? await this.repository.findWithTasks(id) : await this.repository.find(id);
         if(!query) {return null};
 
-        const {username, email, lastLogin} = query;
+        const {username, email, lastLogin, tasks} = query;
         const output: UserOutputDto = {
             id,
             username,
             email,
-            lastLogin
+            lastLogin,
+            tasks
         };
         return output
     }
