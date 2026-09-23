@@ -56,8 +56,19 @@ export class TaskController {
     }
 
     public update = async (req: Request, res: Response) => {
+        const currentToken = req.headers['authorization']?.split(' ')[1] || ''
+        const payload: any = exportPayload(currentToken);
+        const userId = payload?.id; 
+
         const {id} = req.params;
         if(typeof id !== 'string') {return res.status(400).json({message: 'id is required'});}
+
+        const task = await this.service.find(id);
+        if(!task || task.userId !== userId) {
+            res.status(404).send('task not found');
+            return;
+        }
+
         const {title, description, status, priority} = req.body;
         const data: TaskUpdateInputDto = {
             title,
@@ -74,7 +85,19 @@ export class TaskController {
     }
 
     public delete = async (req: Request, res: Response) => {
+        const currentToken = req.headers['authorization']?.split(' ')[1] || ''
+        const payload: any = exportPayload(currentToken);
+        const userId = payload?.id; 
+
         const {id} = req.params;
+        if(typeof id !== 'string') {return res.status(400).json({message: 'id is required'});}
+        
+        const task = await this.service.find(id);
+        if(!task || task.userId !== userId) {
+            res.status(404).send('task not found');
+            return;
+        }
+
         if(typeof id !== 'string') {return res.status(400).json({message: 'id is required'});}
         try{
             await this.service.delete(id);
