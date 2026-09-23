@@ -20,8 +20,13 @@ export function generateRefreshToken(payload: UserPayload): string {
 };
 
 export function exportPayload(token: string): JwtPayload | string {
-    const payload = jwt.verify(token, secret);
-    return payload
+    try {
+        const payload = jwt.verify(token, secret);
+        return payload
+    }
+    catch (error) {
+        throw new Error("Invalid token");
+    }
 }
 
 export function isTokenExpired(exp: number): boolean {
